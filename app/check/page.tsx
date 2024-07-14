@@ -7,6 +7,6 @@ export default function Page() {
   if (!user.isLoaded || !user.isSignedIn) {
     return null;
   }
-
-  return <div>Hello, {user.user.lastName} welcome to Clerk</div>;
+  const username = (user.user.firstName || "") + " " +  (user.user.lastName || "")
+  return <div>Hello, {username } welcome to Clerk</div>;
 }
