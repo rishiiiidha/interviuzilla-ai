@@ -1,0 +1,62 @@
+{
+  "id": "8582b4b3-ea30-463a-9484-83f906551833",
+  "prevId": "92bd1163-edb3-4402-9908-52b622976305",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.interview": {
+      "name": "interview",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "jsonresponse": {
+          "name": "jsonresponse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "jsonquestionsresponse": {
+          "name": "jsonquestionsresponse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interviewId": {
+          "name": "interviewId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

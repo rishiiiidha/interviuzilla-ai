@@ -15,6 +15,13 @@
       "when": 1721030741824,
       "tag": "0001_nebulous_fat_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1721895271096,
+      "tag": "0002_vengeful_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }

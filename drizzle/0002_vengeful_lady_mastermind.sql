@@ -1,0 +1,1 @@
+ALTER TABLE "interview" ADD COLUMN "jsonquestionsresponse" text NOT NULL;
