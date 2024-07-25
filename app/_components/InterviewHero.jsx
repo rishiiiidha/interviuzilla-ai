@@ -2,7 +2,7 @@
 import React from "react";
 import HeroTitle from "./HeroTitle";
 import HeroImage from "./HeroImage";
-import HeroSubtitle from "./HeroSubTitle";
+import HeroSubtitle from "./HeroSubtitle";
 
 function InterviewHero() {
   return (
