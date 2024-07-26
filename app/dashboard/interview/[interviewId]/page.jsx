@@ -43,7 +43,7 @@ const Page = ({ params }) => {
                     }}
                   />
                 ) : (
-                    <img
+                    <Image
                       src="/droplet-hero.png"
                     alt="Interview preparation visual"
                     className="w-full aspect-square max-md:mt-10 max-md:max-w-full"

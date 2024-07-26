@@ -3,11 +3,12 @@ import React from "react";
 import HeroTitle from "./HeroTitle";
 import HeroImage from "./HeroImage";
 import HeroSubtitle from "./HeroSubtitle";
+import Image from "next/image";
 
 function InterviewHero() {
   return (
     <section className="flex overflow-hidden relative flex-col justify-center self-stretch min-h-[972px]">
-      <img
+      <Image
         src="/bg-image.png"
         alt=""
         className="object-cover absolute inset-0 size-full"
