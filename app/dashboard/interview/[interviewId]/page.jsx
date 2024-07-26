@@ -25,7 +25,7 @@ const Page = ({ params }) => {
 
   return (
     <div className={styles.background}>
-      <h2>Let's get started</h2>
+      <h2>Let&apos;s get started</h2>
       <div>
         <main className="flex justify-center items-center px-8 py-20 max-md:px-5">
           <div className="px-14 w-full max-w-screen-xl max-md:px-5 max-md:max-w-full">
