@@ -9,6 +9,8 @@ function InterviewHero() {
   return (
     <section className="flex overflow-hidden relative flex-col justify-center self-stretch min-h-[972px]">
       <Image
+        width="300"
+        height="300"
         src="/bg-image.png"
         alt=""
         className="object-cover absolute inset-0 size-full"
