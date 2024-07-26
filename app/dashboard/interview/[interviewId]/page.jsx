@@ -6,24 +6,22 @@ import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import styles from "../../Dashboard.module.css";
 import Button from "../_components/Button";
+import Image from "next/image";
 
 const Page = ({ params }) => {
   const [interviewDetails, setInterviewDetails] = useState();
   const [webcamEnabled, setWebcamEnabled] = useState(false);
 
   useEffect(() => {
-    console.log(params);
-    YourInterviewContent();
+    const fetchInterviewContent = async () => {
+      const response = await db
+        .select()
+        .from(interview)
+        .where(eq(interview.interviewId, params.interviewId));
+      setInterviewDetails(response[0]);
+    };
+    fetchInterviewContent();
   }, [params.interviewId]);
-
-  const YourInterviewContent = async () => {
-    const response = await db
-      .select()
-      .from(interview)
-      .where(eq(interview.interviewId, params.interviewId));
-    setInterviewDetails(response[0]);
-    // console.log(response)
-  };
 
   return (
     <div className={styles.background}>
@@ -43,16 +41,18 @@ const Page = ({ params }) => {
                     }}
                   />
                 ) : (
-                    <Image
-                      src="/droplet-hero.png"
+                  <Image
+                    src="/droplet-hero.png"
                     alt="Interview preparation visual"
+                    width="300"
+                    height="300"
                     className="w-full aspect-square max-md:mt-10 max-md:max-w-full"
                   />
                 )}
               </div>
               <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 text-base font-bold text-white max-md:mt-10 max-md:max-w-full">
-                  <h1 className="text-4xl font-semibold  max-md:max-w-full max-md:text-4xl max-md:leading-[54px]">
+                  <h1 className="text-4xl font-semibold max-md:max-w-full max-md:text-4xl max-md:leading-[54px]">
                     Activate your webcam and microphone to begin the interview.
                   </h1>
                   <p className="mt-6 font-light leading-6 max-md:max-w-full">
@@ -60,13 +60,13 @@ const Page = ({ params }) => {
                     record your answers to receive AI-generated feedback.
                   </p>
                   <button
-                    text="ENABLE"
                     onClick={() => {
-                     
-                      setWebcamEnabled(true)
+                      setWebcamEnabled(true);
                     }}
                     className="self-start px-5 py-4 mt-6 whitespace-nowrap border border-solid bg-zinc-800 border-gray-950 rounded-[50px] tracking-[2px]"
-                  >Enable</button>
+                  >
+                    ENABLE
+                  </button>
                   <Button
                     text="DIVE INTO THE INTERVIEW FRENZY!"
                     className="px-6 py-4 mt-6 bg-indigo-600 border border-violet-600 border-solid rounded-[50px] tracking-[2px] max-md:px-5 max-md:max-w-full"
