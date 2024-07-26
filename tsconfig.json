@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/dashboard/_components/Resume.jsx"
-, "app/dashboard/layout.jsx", "app/dashboard/page.jsx"  ],
+, "app/dashboard/layout.jsx", "app/dashboard/page.jsx", "neon/index.js", "neon/schema.js", "drizzle.config.js"  ],
   "exclude": ["node_modules"]
 }
