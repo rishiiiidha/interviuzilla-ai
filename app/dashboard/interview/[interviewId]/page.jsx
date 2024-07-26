@@ -35,6 +35,7 @@ const Page = ({ params }) => {
                   <Webcam
                     onUserMedia={() => setWebcamEnabled(true)}
                     onUserMediaError={() => setWebcamEnabled(false)}
+                    mirrored="false"
                     style={{
                       width: 300,
                       height: 300,
