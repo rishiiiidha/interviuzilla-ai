@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import React, { useEffect, useState } from 'react'
 import Questions from './_components/Questions'
 
-const page = ({ params }) => {
+const Page = ({ params }) => {
   const [interviewDetails, setInterviewDetails] = useState()
   const [questions, setQuestions] = useState()
   const [activeQuestionIndex,setActiveQuestionIndex] =useState(0)
@@ -35,4 +35,4 @@ const page = ({ params }) => {
   )
 }
 
-export default page
+export default Page
