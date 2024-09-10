@@ -3,17 +3,15 @@ import React, { useState } from "react";
 import { FaLightbulb, FaVolumeDown } from "react-icons/fa";
 
 const Questions = ({ questions, activeQuestionIndex,setActiveQuestionIndex }) => {
-	// const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
 	const handleQuestionClick = (index) => {
 		setActiveQuestionIndex((prevIndex) => (prevIndex === index ? null : index));
 	};
 
-	// Function to handle text-to-speech
 	const handleSpeak = (text) => {
 		if (window.speechSynthesis) {
 			const utterance = new SpeechSynthesisUtterance(text);
-			utterance.lang = "en-US"; // You can set the language here
+			utterance.lang = "en-US"; 
 			window.speechSynthesis.speak(utterance);
 		} else {
 			alert("Speech Synthesis not supported in this browser.");
@@ -41,8 +39,8 @@ const Questions = ({ questions, activeQuestionIndex,setActiveQuestionIndex }) =>
 								<div
 									className='text-white mb-2 size-4 cursor-pointer'
 									onClick={(e) => {
-										e.stopPropagation(); // Prevent triggering the question toggle
-										handleSpeak(question.question); // Speak the question
+										e.stopPropagation(); 
+										handleSpeak(question.question); 
 									}}
 								>
 									<FaVolumeDown />

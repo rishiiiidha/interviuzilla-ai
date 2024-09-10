@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { chatSession } from "@/gemini-model/GeminiAIModel";
 import { useUser } from "@clerk/nextjs";
-import moment from "moment"; // assuming moment is imported for date formatting
+import moment from "moment"; 
 import { db } from "@/neon";
 
 const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
@@ -93,35 +93,6 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 			setLoading(false);
 		}
 	};
-	//     const updateUserAnswer = async () => {
-	// 		setLoading(true);
-	// 		try {
-	// 			const feedbackPrompt =
-	// 				Question: ${questions[activeQuestionIndex].question}
-	// 				User answer: ${userAnswer}
-	// 				Based on the question and user answer, please provide a rating for the answer and feedback in 2 to 3 lines. Return only JSON format with rating and feedback fields. No additional explanation.
-	// 			;
-
-	// 			const result = await chatSession.sendMessage(feedbackPrompt);
-	// 			const jsonResponse = result.response
-	// 				.text()
-	// 				.replace("
-	// json", "")
-	// 				.replace("
-	// ", "");
-	// 			const jsonFeedbackResponse = JSON.parse(jsonResponse);
-
-	// 			if (response) {
-	// 				toast.success("User answer recorded successfully.");
-	// 				setUserAnswer("");
-	// 			}
-	// 		} catch (error) {
-	// 			console.error("Error updating user answer: ", error);
-	// 			toast.error("Failed to record answer. Please try again later.");
-	// 		} finally {
-	// 			setLoading(false);
-	// 		}
-	// 	};
 
 	useEffect(() => {
 		navigator.permissions.query({ name: "camera" }).then((permission) => {

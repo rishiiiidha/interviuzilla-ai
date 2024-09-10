@@ -1,4 +1,3 @@
-// app/dashboard/_components/Resume.jsx (Client-side)
 "use client";
 import React from "react";
 
