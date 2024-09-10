@@ -163,7 +163,7 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 			)}
 
 			<div>
-				{microphoneAllowed && (
+				{ (
 					<button
 						type='button'
 						onClick={stopRecording}
