@@ -16,11 +16,11 @@ const Page = ({ params }) => {
           .select()
           .from(interview)
           .where(eq(interview.interviewId, params.interviewId));
-        console.log(response)
+        // console.log(response)
         const JsonResponse = JSON.parse(response[0].jsonquestionsrespnse)
         setInterviewDetails(response[0])
         setQuestions(JsonResponse);
-        console.log(JsonResponse)
+        // console.log(JsonResponse)
       };
       fetchInterviewContent();
     }, [params.interviewId]);
