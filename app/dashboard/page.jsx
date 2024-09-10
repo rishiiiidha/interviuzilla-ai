@@ -37,14 +37,14 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        "https://v2.convertapi.com/convert/pdf/to/txt?Secret=4DhI61YVBXLsQMDM",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+				"https://v2.convertapi.com/convert/pdf/to/txt?Secret=secret_mcmx66vWuGSUVC6z",
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
       const fileData = response.data.Files[0].FileData;
       const decodedText = atob(fileData);
       const inputPrompt =

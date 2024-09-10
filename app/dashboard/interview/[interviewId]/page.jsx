@@ -1,17 +1,18 @@
 "use client";
 import { db } from "@/neon";
 import { interview } from "@/neon/schema";
-import { eq } from "drizzle-orm";
+import { eq, param } from "drizzle-orm";
 import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import styles from "../../Dashboard.module.css";
 import Button from "../_components/Button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params }) => {
   const [interviewDetails, setInterviewDetails] = useState();
   const [webcamEnabled, setWebcamEnabled] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchInterviewContent = async () => {
       const response = await db
@@ -30,24 +31,26 @@ const Page = ({ params }) => {
         <main className="flex justify-center items-center px-8 py-20 max-md:px-5">
           <div className="px-14 w-full max-w-screen-xl max-md:px-5 max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col">
-              <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full mr-32 ">
                 {webcamEnabled ? (
                   <Webcam
                     onUserMedia={() => setWebcamEnabled(true)}
                     onUserMediaError={() => setWebcamEnabled(false)}
                     mirrored="false"
                     style={{
-                      width: 300,
-                      height: 300,
+                      width: 900,
+                      marginTop:50,
+                      marginRight: 100,
+                      borderRadius: "100%",
                     }}
                   />
                 ) : (
                   <Image
-                    src="/droplet-hero.png"
+                    src="/side-img.png"
                     alt="Interview preparation visual"
                     width="300"
                     height="300"
-                    className="w-full aspect-square max-md:mt-10 max-md:max-w-full"
+                    className="w-full  aspect-square max-md:mt-10 max-md:max-w-full"
                   />
                 )}
               </div>
@@ -68,10 +71,16 @@ const Page = ({ params }) => {
                   >
                     ENABLE
                   </button>
-                  <Button
-                    text="DIVE INTO THE INTERVIEW FRENZY!"
+                  <button
+                    onClick={() => {
+                      router.push(
+                        "/dashboard/interview/"+params.interviewId + "/start"
+                      );
+                    }}
                     className="px-6 py-4 mt-6 bg-indigo-600 border border-violet-600 border-solid rounded-[50px] tracking-[2px] max-md:px-5 max-md:max-w-full"
-                  />
+                  >
+                    DIVE INTO THE INTERVIEW FRENZY!
+                  </button>
                 </div>
               </div>
             </div>
