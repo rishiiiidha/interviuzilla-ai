@@ -48,7 +48,7 @@ const Page = () => {
       const fileData = response.data.Files[0].FileData;
       const decodedText = atob(fileData);
       const inputPrompt =
-        decodedText + "based on the given text return the " + process.env.NEXT_PUBLIC_HR_INTERVIEW_QUESTIONS + " HR Interview questions with answers in json format";
+        decodedText + "based on the given text return the " + process.env.NEXT_PUBLIC_HR_INTERVIEW_QUESTIONS + " HR Interview questions with answers in json format no need of any explanation of answer just give questions and its answer in the json format";
       const result = await chatSession.sendMessage(inputPrompt);
       const jsonquestionsresponse = result.response.text().replace('```json','').replace('```','')
       setResponse(jsonquestionsresponse);

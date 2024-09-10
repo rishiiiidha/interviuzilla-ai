@@ -4,6 +4,7 @@ import { interview } from '@/neon/schema';
 import { eq } from 'drizzle-orm';
 import React, { useEffect, useState } from 'react'
 import Questions from './_components/Questions'
+import Answer from './_components/Answer'
 
 const Page = ({ params }) => {
   const [interviewDetails, setInterviewDetails] = useState()
@@ -15,6 +16,7 @@ const Page = ({ params }) => {
           .select()
           .from(interview)
           .where(eq(interview.interviewId, params.interviewId));
+        console.log(response)
         const JsonResponse = JSON.parse(response[0].jsonquestionsrespnse)
         setInterviewDetails(response[0])
         setQuestions(JsonResponse);
@@ -24,15 +26,23 @@ const Page = ({ params }) => {
     }, [params.interviewId]);
 
   return (
-    <div>
-      <div className='grid grid-cols-1 md:grid-cols-2'>
-        {/* Questions */}
-        <Questions questions={questions} activeQuestionIndex={activeQuestionIndex} setActiveQuestionIndex={setActiveQuestionIndex} />
-        {/* video / audio recording  */}
-
-      </div>
-    </div>
-  )
+		<div>
+			<div className='grid grid-cols-1 md:grid-cols-2'>
+				{/* Questions */}
+				<Questions
+					questions={questions}
+					activeQuestionIndex={activeQuestionIndex}
+					setActiveQuestionIndex={setActiveQuestionIndex}
+				/>
+				{/* video / audio recording  */}
+				<Answer
+					questions={questions}
+					activeQuestionIndex={activeQuestionIndex}
+					interviewDetails={interviewDetails}
+				/>
+			</div>
+		</div>
+	);
 }
 
 export default Page
