@@ -58,6 +58,9 @@ const Questions = ({ questions, activeQuestionIndex,setActiveQuestionIndex }) =>
 						<FaLightbulb />
 						<strong>Note :</strong>
 					</h2>
+					<div className="text-white py-2 text-sm pl-1">
+						Make sure you record the answer to get the rating and feedback !
+					</div>
 				</div>
 			</div>
 		</div>
