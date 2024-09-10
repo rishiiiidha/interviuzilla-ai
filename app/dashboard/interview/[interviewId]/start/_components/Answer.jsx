@@ -28,15 +28,12 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 		useLegacyResults: false,
 	});
 
-	// Append recognized speech results to the user's answer
-    useEffect(() => {
-        // console.log(interviewDetails)
+	useEffect(() => {
 		results.forEach((result) => {
 			setUserAnswer((prevAnswer) => prevAnswer + result.transcript);
 		});
 	}, [results]);
 
-	// Auto-update answer if it's more than 10 characters long
 	useEffect(() => {
 		if (!isRecording && userAnswer.length >= 10) {
 			mockUserAnswerUpdate();
@@ -63,67 +60,68 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 			startSpeechToText();
 		}
 	};
-    const mockUserAnswerUpdate = async () => {
-			setLoading(true);
-			try {
-				const mockResponse = {
-					rating: Math.floor(Math.random() * 5) + 1,
-					feedback: "Good answer, but try to provide more details next time.",
-				};
+	const mockUserAnswerUpdate = async () => {
+		setLoading(true);
+		try {
+			const feedbackPrompt = `Question: ${questions[activeQuestionIndex].question}
+				User answer: ${userAnswer}
+				Based on the question and user answer, please provide a rating for the answer in terms of numbers like out 10 and feedback in 2 to 3 lines. Return only JSON format with rating and feedback fields. No additional explanation.`;
+			const result = await chatSession.sendMessage(feedbackPrompt);
+			const jsonResponse = result.response
+				.text()
+				.replace("```json", "")
+				.replace("```", "");
+			const jsonFeedbackResponse = JSON.parse(jsonResponse);
+			toast.success(
+				`Rating: ${jsonFeedbackResponse.rating}/10, Feedback: ${jsonFeedbackResponse.feedback}`,
+				{
+					position: "top-center",
+					autoClose: false,
+					hideProgressBar: true,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					theme: "dark",
+				}
+			);
 
-				toast.success(
-					`Rating: ${mockResponse.rating}, Feedback: ${mockResponse.feedback}`,
-					{
-						position: "top-center",
-						autoClose: 5000,
-						hideProgressBar: true,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						theme: "dark",
-					}
-				);
+			setUserAnswer("");
+		} catch (error) {
+			console.error("Error updating user answer: ", error);
+			toast.error("Failed to generate feedback. Please try again later.");
+		} finally {
+			setLoading(false);
+		}
+	};
+	//     const updateUserAnswer = async () => {
+	// 		setLoading(true);
+	// 		try {
+	// 			const feedbackPrompt =
+	// 				Question: ${questions[activeQuestionIndex].question}
+	// 				User answer: ${userAnswer}
+	// 				Based on the question and user answer, please provide a rating for the answer and feedback in 2 to 3 lines. Return only JSON format with rating and feedback fields. No additional explanation.
+	// 			;
 
-				setUserAnswer("");
-			} catch (error) {
-				console.error("Error updating user answer: ", error);
-				toast.error("Failed to generate feedback. Please try again later.");
-			} finally {
-				setLoading(false);
-			}
-    };
-//     const updateUserAnswer = async () => {
-// 		setLoading(true);
-// 		try {
-// 			const feedbackPrompt = 
-// 				Question: ${questions[activeQuestionIndex].question}
-// 				User answer: ${userAnswer}
-// 				Based on the question and user answer, please provide a rating for the answer and feedback in 2 to 3 lines. Return only JSON format with rating and feedback fields. No additional explanation.
-// 			;
+	// 			const result = await chatSession.sendMessage(feedbackPrompt);
+	// 			const jsonResponse = result.response
+	// 				.text()
+	// 				.replace("
+	// json", "")
+	// 				.replace("
+	// ", "");
+	// 			const jsonFeedbackResponse = JSON.parse(jsonResponse);
 
-// 			const result = await chatSession.sendMessage(feedbackPrompt);
-// 			const jsonResponse = result.response
-// 				.text()
-// 				.replace("
-// json", "")
-// 				.replace("
-// ", "");
-// 			const jsonFeedbackResponse = JSON.parse(jsonResponse);
-
-		
-// 			if (response) {
-// 				toast.success("User answer recorded successfully.");
-// 				setUserAnswer("");
-// 			}
-// 		} catch (error) {
-// 			console.error("Error updating user answer: ", error);
-// 			toast.error("Failed to record answer. Please try again later.");
-// 		} finally {
-// 			setLoading(false);
-// 		}
-// 	};
-
-
+	// 			if (response) {
+	// 				toast.success("User answer recorded successfully.");
+	// 				setUserAnswer("");
+	// 			}
+	// 		} catch (error) {
+	// 			console.error("Error updating user answer: ", error);
+	// 			toast.error("Failed to record answer. Please try again later.");
+	// 		} finally {
+	// 			setLoading(false);
+	// 		}
+	// 	};
 
 	useEffect(() => {
 		navigator.permissions.query({ name: "camera" }).then((permission) => {
@@ -163,7 +161,7 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 			)}
 
 			<div>
-				{ (
+				{
 					<button
 						type='button'
 						onClick={stopRecording}
@@ -171,7 +169,7 @@ const Answer = ({ questions, activeQuestionIndex, interviewDetails }) => {
 					>
 						{isRecording ? "Stop Recording" : "Record Answer"}
 					</button>
-				)}
+				}
 			</div>
 		</div>
 	);
