@@ -37,7 +37,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-				"https://v2.convertapi.com/convert/pdf/to/txt?Secret=secret_7sA21fJE5MLWBc05",
+				"https://v2.convertapi.com/convert/pdf/to/txt?Secret=secret_0uE9CuMPGZOlknL8",
 				formData,
 				{
 					headers: {
