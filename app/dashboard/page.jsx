@@ -1,57 +1,70 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styles from "./Dashboard.module.css";
-import Loader from './_components/Loader'
+import Loader from "./_components/Loader";
 import { chatSession } from "../../gemini-model/GeminiAIModel";
 import { db } from "@/neon";
-import {v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
-import moment from "moment"
+import moment from "moment";
 import { interview } from "@/neon/schema";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-  const [convertedText, setConvertedText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState([])
-  const {user} = useUser()
-  const router = useRouter()
+  const [response, setResponse] = useState([]);
+  const { user } = useUser();
+  const router = useRouter();
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
-    setFileName(selectedFile.name); 
+    setFileName(selectedFile.name);
   };
 
   const handleClick = async () => {
-    if(file) setLoading(true)
     if (!file) {
       alert("Please select a file first!");
       return;
     }
 
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("File", file);
+    formData.append("StoreFile", "true");
 
     try {
-      const response = await axios.post(
-				"https://v2.convertapi.com/convert/pdf/to/txt?Secret=secret_0uE9CuMPGZOlknL8",
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
-			);
-      const fileData = response.data.Files[0].FileData;
+      const convertResponse = await axios.post(
+        "https://v2.convertapi.com/convert/pdf/to/txt",
+        formData,
+        {
+          headers: {
+            ...formData.getHeaders?.(), 
+            "Authorization": "Bearer xhJ402CL7WBZ86yb8y97eetvbPLHQPJc",
+          },
+        }
+      );
+
+      const fileData = convertResponse.data.Files[0].FileData;
       const decodedText = atob(fileData);
+
       const inputPrompt =
-        decodedText + "based on the given text return the " + process.env.NEXT_PUBLIC_HR_INTERVIEW_QUESTIONS + " HR Interview questions that are only related to his resume based completely resume based question of size 2 to 3 lines with answers in json format no need of any explanation of answer just give questions and its answer in the json format make sure json is returned only json should be returned";
+        decodedText +
+        " based on the given text return the " +
+        process.env.NEXT_PUBLIC_HR_INTERVIEW_QUESTIONS +
+        " HR Interview questions that are only related to his resume based completely resume based question of size 2 to 3 lines with answers in json format no need of any explanation of answer just give questions and its answer in the json format make sure json is returned only json should be returned";
+
       const result = await chatSession.sendMessage(inputPrompt);
-      const jsonquestionsresponse = result.response.text().replace('```json','').replace('```','')
+      const jsonquestionsresponse = result.response
+        .text()
+        .replace("```json", "")
+        .replace("```", "");
       setResponse(jsonquestionsresponse);
+
       if (jsonquestionsresponse) {
         const uploadResponse = await db
           .insert(interview)
@@ -59,30 +72,30 @@ const Page = () => {
             interviewId: uuidv4(),
             jsonresponse: decodedText,
             jsonquestionsrespnse: jsonquestionsresponse,
-            createdBy: user.primaryEmailAddress.emailAddress,
+            createdBy: user?.primaryEmailAddress?.emailAddress || "unknown",
             createdAt: moment().format("DD-MM-YYYY"),
           })
           .returning({ interviewId: interview.interviewId });
-        console.log(uploadResponse);
-        if (uploadResponse) {
-          router.push('/dashboard/interview/' + uploadResponse[0].interviewId)
-        }
-      }
-      else {
-        alert('Error in uploading database')
-      }
 
+        if (uploadResponse) {
+          router.push("/dashboard/interview/" + uploadResponse[0].interviewId);
+        }
+      } else {
+        alert("Error in uploading database");
+      }
     } catch (error) {
       console.error("Error converting file:", error);
+      alert("Something went wrong. Please try again.");
     }
-    setLoading(false)
+
+    setLoading(false);
   };
 
   return (
     <div className={styles.background}>
       {!loading && (
         <form className="flex items-end flex-col mt-52">
-          <div className="flex items-center justify-center w-full ">
+          <div className="flex items-center justify-center w-full">
             <label
               htmlFor="dropzone-file"
               className="flex flex-col items-center justify-center md:w-[500px] w-[350px] h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-950 dark:bg-gray-950 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -104,7 +117,7 @@ const Page = () => {
                   />
                 </svg>
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload your Resume</span> 
+                  <span className="font-semibold">Click to upload your Resume</span>
                 </p>
                 {!fileName && (
                   <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -120,7 +133,7 @@ const Page = () => {
               <input
                 id="dropzone-file"
                 type="file"
-                className="hidden relative"
+                className="hidden"
                 onChange={handleFileChange}
               />
             </label>
@@ -129,7 +142,7 @@ const Page = () => {
           <button
             onClick={handleClick}
             type="button"
-            className="py-2.5 px-5 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border hover:border-gray-500 border-gray-700 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-950  dark:border-gray-600 dark:text-white dark:hover:bg-gray-950"
+            className="py-2.5 px-5 me-2 my-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border hover:border-gray-500 border-gray-700 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-950 dark:border-gray-600 dark:text-white dark:hover:bg-gray-950"
           >
             Start Your Interview
           </button>
